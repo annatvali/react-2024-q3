@@ -1,14 +1,21 @@
 import { Component } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
+import LandingPageLayout from './layout/LandingPageLayout';
+import Home from './routes/Home';
+import AboutUs from './routes/AboutUs';
 
 export default class App extends Component {
   render() {
     return (
-      <>
-        <h1 className="text-3xl font-bold text-blue-400 text-center">
-          Class Components
-        </h1>
-      </>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPageLayout />}>
+            <Route index element={<Home />} />
+            <Route path="aboutus" element={<AboutUs />} />
+          </Route>
+        </Routes>
+      </Router>
     );
   }
 }
