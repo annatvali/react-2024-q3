@@ -8,7 +8,9 @@ export default class LandingPageLayout extends Component {
     return (
       <>
         <Header />
-        <Outlet />
+        <div className="max-w-4xl mx-auto">
+          <Outlet />
+        </div>
         <Footer />
       </>
     );
