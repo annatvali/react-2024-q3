@@ -1,7 +1,5 @@
 import { Component } from 'react';
 import SearchBar from '../components/SearchBar';
-import ErrorBoundary from '../components/errors/ErrorBoundary';
-import ErrorButton from '../components/errors/ErrorButton';
 import PokemonCard from '../components/PokemonCard';
 import { Pokemon, TypeInfo } from '../types/type';
 import PokemonAPI from '../services/api';
@@ -94,21 +92,18 @@ export default class HomePage extends Component<Props, State> {
     const { pokemons, loading, error } = this.state;
 
     return (
-      <ErrorBoundary>
-        <div className="mx-2">
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-16">
-            <SearchBar onSearch={(query) => this.handleSearch(query)} />
-            <ErrorButton />
-          </div>
-          {loading && <p>Loading...</p>}
-          {error && <p className="text-red-500">{error}</p>}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-4 my-16">
-            {pokemons.map((pokemon: Pokemon) => (
-              <PokemonCard key={pokemon.id} {...pokemon} />
-            ))}
-          </div>
+      <div className="mx-2">
+        <div className="flex justify-center items-center mt-16">
+          <SearchBar onSearch={(query) => this.handleSearch(query)} />
         </div>
-      </ErrorBoundary>
+        {loading && <p>Loading...</p>}
+        {error && <p className="text-red-500">{error}</p>}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-4 my-16">
+          {pokemons.map((pokemon: Pokemon) => (
+            <PokemonCard key={pokemon.id} {...pokemon} />
+          ))}
+        </div>
+      </div>
     );
   }
 }
