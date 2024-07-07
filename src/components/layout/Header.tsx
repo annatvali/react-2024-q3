@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Logo from './Logo';
+import Logo from '../ui/Logo';
 
 export default class Header extends Component {
   render() {
