@@ -27,6 +27,7 @@ export default class SearchBar extends Component<Props, State> {
 
   handleErrorBtnClick = (): void => {
     this.setState({ hasError: true });
+    throw new Error('Intentional error');
   };
 
   render() {
