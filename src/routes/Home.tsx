@@ -22,10 +22,14 @@ export default class HomePage extends Component<Props, State> {
 
   async componentDidMount() {
     this.setState({ loading: true });
-    this.fetchAllPokemons();
-    const savedQuery = localStorage.getItem('searchQuery') || '';
-    if (savedQuery) {
-      this.setState({ searchQuery: savedQuery });
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchQuery =
+      urlParams.get('search') || localStorage.getItem('searchQuery') || '';
+    const trimmedQuery = searchQuery.trim();
+    if (trimmedQuery) {
+      this.handleSearch(trimmedQuery);
+    } else {
+      this.fetchAllPokemons();
     }
   }
 
@@ -41,7 +45,7 @@ export default class HomePage extends Component<Props, State> {
       const detailedPokemons = await this.fetchPokemonDetails(pokemons.results);
       this.setState({ pokemons: detailedPokemons, loading: false });
     } catch (error) {
-      this.handleError(error);
+      this.setState({ error: 'Failed to load Pokémon', loading: false });
     }
   };
 
@@ -63,10 +67,24 @@ export default class HomePage extends Component<Props, State> {
   };
 
   handleSearch = async (query: string) => {
-    this.setState({ loading: true, error: null, searchQuery: query });
-    localStorage.setItem('searchQuery', query);
+    const trimmedQuery = query.trim();
+    this.setState({ loading: true, error: null, searchQuery: trimmedQuery });
+    localStorage.setItem('searchQuery', trimmedQuery);
+
+    if (trimmedQuery === '') {
+      window.history.pushState({}, '', window.location.pathname);
+      this.fetchAllPokemons();
+      return;
+    } else {
+      window.history.pushState(
+        { search: trimmedQuery },
+        '',
+        `?search=${trimmedQuery}`
+      );
+    }
+
     try {
-      const pokemon = await PokemonAPI.searchPokemon(query);
+      const pokemon = await PokemonAPI.searchPokemon(trimmedQuery);
       if (pokemon) {
         this.setState({ pokemons: [pokemon], loading: false });
       } else {

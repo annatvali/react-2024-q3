@@ -16,13 +16,30 @@ export default class SearchBar extends Component<Props, State> {
     this.state = { query: '', hasError: false };
   }
 
-  handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     this.setState({ query: e.target.value });
   };
 
-  handleSubmit = (e: FormEvent) => {
+  handleSubmit = (e: FormEvent): void => {
     e.preventDefault();
-    this.props.onSearch(this.state.query);
+    const trimmedQuery = this.state.query.trim();
+    // this.props.onSearch(trimmedQuery);
+
+    if (trimmedQuery === '') {
+      // Check if the URL already has search parameters
+      const searchParams = new URLSearchParams(window.location.search);
+      const hasSearchParams = searchParams.has('search');
+
+      if (hasSearchParams) {
+        // If URL has search parameters, clear them and display all pokemons
+        window.history.pushState({}, '', window.location.pathname);
+        this.props.onSearch(''); // Assuming onSearch with empty string fetches all pokemons
+      }
+      // If there are no search parameters, do nothing
+    } else {
+      // If there is a query, proceed with the search
+      this.props.onSearch(trimmedQuery);
+    }
   };
 
   handleErrorBtnClick = (): void => {
