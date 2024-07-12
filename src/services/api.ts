@@ -9,7 +9,7 @@ export default class PokemonAPI {
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    return await response.json();
+    return response.json();
   }
 
   static async searchPokemon(query: string): Promise<Pokemon | null> {
