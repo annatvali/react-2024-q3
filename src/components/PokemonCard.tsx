@@ -1,10 +1,10 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import { Pokemon } from '../types/type';
 import gradientGenerator from '../utils/gradientGenerator';
 
 interface PokemonCardProps extends Pokemon {}
 
-export default class PokemonCard extends Component<PokemonCardProps> {
+export default class PokemonCard extends PureComponent<PokemonCardProps> {
   constructor(props: PokemonCardProps) {
     super(props);
   }
