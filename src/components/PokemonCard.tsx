@@ -1,15 +1,22 @@
 import { memo } from 'react';
 import { Pokemon } from '../types/type';
 import generateGradient from '../utils/gradientGenerator';
+import { useNavigate } from 'react-router';
 
 interface PokemonCardProps extends Pokemon {}
 
 const PokemonCard: React.FC<PokemonCardProps> = memo(
   ({ id, name, image, type }) => {
+    const navigate = useNavigate();
     const gradientClass = generateGradient(id);
+
+    const handleClick = (): void => {
+      navigate(`/pokemon/${id}`);
+    };
 
     return (
       <div
+        onClick={handleClick}
         className={`group relative my-4 cursor-pointer overflow-hidden rounded-lg shadow-md transition duration-150 ease-in-out ${gradientClass}`}
       >
         <div className="relative h-40 overflow-hidden rounded-md">

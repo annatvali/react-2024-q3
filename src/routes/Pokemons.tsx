@@ -138,7 +138,7 @@ const Pokemons: React.FC = () => {
   };
 
   return (
-    <div className="mx-2">
+    <main className="mx-2">
       <div className="flex justify-center items-center mt-16">
         <SearchBar onSearch={(query) => handleSearch(query)} />
       </div>
@@ -156,7 +156,7 @@ const Pokemons: React.FC = () => {
         nextUrl={nextUrl}
         previousUrl={previousUrl}
       />
-    </div>
+    </main>
   );
 };
 

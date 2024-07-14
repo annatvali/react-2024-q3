@@ -1,19 +1,34 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import LandingPageLayout from './layout/LandingPageLayout';
 import Home from './routes/Home';
 import AboutUs from './routes/AboutUs';
+import PokemmDetails from './routes/PokemonDetails';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <LandingPageLayout />,
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+        children: [
+          {
+            path: '/pokemon/:id',
+            element: <PokemmDetails />,
+          },
+        ],
+      },
+      {
+        path: '/aboutus',
+        element: <AboutUs />,
+      },
+    ],
+  },
+]);
 
 const App = () => {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPageLayout />}>
-          <Route index element={<Home />} />
-          <Route path="aboutus" element={<AboutUs />} />
-        </Route>
-      </Routes>
-    </Router>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;
