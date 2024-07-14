@@ -31,7 +31,6 @@ const Pokemons: React.FC = () => {
       setPreviousUrl(pokemonsData.previous);
       setLoading(false);
     } catch (error) {
-      setError('Failed to load Pokémon');
       setLoading(false);
     }
   }, []);
@@ -57,7 +56,6 @@ const Pokemons: React.FC = () => {
     async (query: string) => {
       const trimmedQuery = query.trim();
       setLoading(true);
-      setError(null);
       setSearchQuery(trimmedQuery);
       localStorage.setItem('searchQuery', trimmedQuery);
 
@@ -78,22 +76,18 @@ const Pokemons: React.FC = () => {
         if (pokemon) {
           setPokemons([pokemon]);
           setLoading(false);
+          setError(null);
         } else {
-          setError('Pokémon not found');
           setLoading(false);
           setPokemons([]);
         }
       } catch (error) {
-        handleError('Failed to search Pokémon!');
+        setLoading(false);
+        setError('Failed to fetch Pokémon data. Please try again.');
       }
     },
     [fetchAllPokemonsData, setSearchQuery, currentPage]
   );
-
-  const handleError = (error: unknown) => {
-    setError(error instanceof Error ? error.message : String(error));
-    setLoading(false);
-  };
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -137,13 +131,16 @@ const Pokemons: React.FC = () => {
     fetchAllPokemonsData(page);
   };
 
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
+
   return (
     <main className="mx-2">
       <div className="flex justify-center items-center mt-16">
         <SearchBar onSearch={(query) => handleSearch(query)} />
       </div>
       {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
       <CardsList pokemons={pokemons} />
       <Pagination
         currentPage={currentPage}
