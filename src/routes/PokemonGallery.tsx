@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import useSearchQuery from '../hooks/useSearchQuery';
 import SearchBar from '../components/SearchBar';
-import PokemonCard from '../components/PokemonCard';
 import { Pokemon, TypeInfo } from '../types/type';
 import { getPokemonsList, getPokemon } from '../services/api';
 import Pagination from '../components/Pagination';
+import CardsList from '../components/CardsList';
 
 const Pokemons: React.FC = () => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
@@ -144,11 +144,7 @@ const Pokemons: React.FC = () => {
       </div>
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-4 my-16">
-        {pokemons.map((pokemon: Pokemon) => (
-          <PokemonCard key={pokemon.id} {...pokemon} />
-        ))}
-      </div>
+      <CardsList pokemons={pokemons} />
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

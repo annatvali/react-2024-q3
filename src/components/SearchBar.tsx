@@ -39,7 +39,7 @@ const SearchBar: React.FC<Props> = ({ onSearch }) => {
     <div className="w-full">
       <form
         onSubmit={handleSubmit}
-        className="w-full flex items-center space-x-2"
+        className="w-full flex-wrap sm:flex items-center space-x-2"
       >
         <input
           type="text"
@@ -48,13 +48,16 @@ const SearchBar: React.FC<Props> = ({ onSearch }) => {
           className="border-2 p-2 flex-grow rounded-md"
           placeholder="Search Pokémon..."
         />
-        <Button type="submit" className="bg-blue-500 hover:bg-blue-700">
+        <Button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-700 mt-2 sm:mt-0"
+        >
           Search
         </Button>
         <Button
           type="button"
           onClick={handleErrorBtnClick}
-          className="w-32 bg-red-500 hover:bg-red-700"
+          className="w-32 bg-red-500 hover:bg-red-700 mt-2 sm:mt-0"
         >
           Throw Error
         </Button>
