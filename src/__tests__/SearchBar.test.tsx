@@ -3,7 +3,6 @@ import '@testing-library/jest-dom';
 import SearchBar from '../components/SearchBar';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 
-// Mock the localStorage
 beforeEach(() => {
   localStorage.clear();
   vi.spyOn(Storage.prototype, 'setItem');

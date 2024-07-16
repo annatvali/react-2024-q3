@@ -9,7 +9,8 @@ const Card: React.FC<PokemonCardProps> = memo(({ id, name, image, type }) => {
   const navigate = useNavigate();
   const gradientClass = generateGradient(id);
 
-  const handleClick = (): void => {
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+    e.preventDefault();
     navigate(`/pokemon/${id}`);
   };
 
