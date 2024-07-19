@@ -8,7 +8,7 @@ import CardsList from '../components/CardsList';
 
 const Pokemons: React.FC = () => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
-  const [searchQuery, setSearchQuery] = useSearchQuery('');
+  const [searchQuery, setSearchQuery] = useSearchQuery('searchQuery', '');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
