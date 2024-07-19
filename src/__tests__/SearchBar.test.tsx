@@ -1,5 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import SearchBar from '../components/SearchBar';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 
@@ -24,13 +23,16 @@ describe('SearchBar Component', () => {
     expect(onSearchMock).toHaveBeenCalledWith('Pikachu');
   });
 
-  test('retrieves the value from local storage upon mounting', () => {
+  test('retrieves the value from local storage upon mounting', async () => {
     localStorage.setItem('searchQuery', 'Charmander');
 
     const onSearchMock = vi.fn();
     render(<SearchBar onSearch={onSearchMock} />);
 
     const inputElement = screen.getByPlaceholderText('Search Pokémon...');
-    expect(inputElement).toHaveValue('Charmander');
+
+    waitFor(() => {
+      expect(inputElement).toHaveValue('Charmander');
+    });
   });
 });

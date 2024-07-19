@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState, useEffect } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import Button from './ui/Button';
 
 type Props = {
@@ -8,13 +8,6 @@ type Props = {
 const SearchBar: React.FC<Props> = ({ onSearch }) => {
   const [query, setQuery] = useState('');
   const [hasError, setState] = useState(false);
-
-  useEffect(() => {
-    const storedQuery = localStorage.getItem('searchQuery');
-    if (storedQuery) {
-      setQuery(storedQuery);
-    }
-  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setQuery(e.target.value);
