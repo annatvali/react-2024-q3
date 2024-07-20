@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import CardsList from '../components/CardsList';
-import '@testing-library/jest-dom';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 
 const mockPokemons = [
@@ -22,10 +21,14 @@ const mockPokemons = [
 ];
 
 describe('CardsList Component', () => {
-  test('renders the specified number of cards', () => {
+  it('renders the specified number of cards', () => {
     render(
       <BrowserRouter>
-        <CardsList pokemons={mockPokemons} />
+        <CardsList
+          pokemons={mockPokemons}
+          currentPage={1}
+          onCardClick={() => {}}
+        />
       </BrowserRouter>
     );
     const cardImages = screen.getAllByRole('img', {
@@ -34,10 +37,10 @@ describe('CardsList Component', () => {
     expect(cardImages).toHaveLength(mockPokemons.length);
   });
 
-  test('displays an appropriate message if no cards are present', () => {
+  it('displays an appropriate message if no cards are present', () => {
     render(
       <BrowserRouter>
-        <CardsList pokemons={[]} />
+        <CardsList pokemons={[]} currentPage={1} onCardClick={() => {}} />
       </BrowserRouter>
     );
     const message = screen.getByText((_content, node) => {
