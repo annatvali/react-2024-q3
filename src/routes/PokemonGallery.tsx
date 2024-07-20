@@ -6,6 +6,7 @@ import { Pokemon, TypeInfo } from '../types/type';
 import { getPokemonsList, getPokemon } from '../services/api';
 import Pagination from '../components/Pagination';
 import CardsList from '../components/CardsList';
+import { ITEMS_PER_PAGE } from '../utils/constants';
 
 const PokemonGallery: React.FC = () => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
@@ -14,14 +15,10 @@ const PokemonGallery: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const { pageId } = useParams<{ pageId: string }>();
-  const [currentPage, setCurrentPage] = useState<number>(Number(pageId) || 1);
+  const currentPage = Number(pageId) || 1;
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [nextUrl, setNextUrl] = useState<string | null>(null);
-  const [previousUrl, setPreviousUrl] = useState<string | null>(null);
 
   const navigate = useNavigate();
-
-  const ITEMS_PER_PAGE = 20;
 
   const fetchAllPokemonsData = useCallback(async (page: number) => {
     setIsLoading(true);
@@ -31,10 +28,9 @@ const PokemonGallery: React.FC = () => {
       const detailedPokemons = await fetchPokemonDetails(pokemonsData.results);
       setPokemons(detailedPokemons);
       setTotalPages(Math.ceil(pokemonsData.count / ITEMS_PER_PAGE));
-      setNextUrl(pokemonsData.next);
-      setPreviousUrl(pokemonsData.previous);
-      setIsLoading(false);
     } catch (error) {
+      console.error('Failed to fetch Pokémon data!', error);
+    } finally {
       setIsLoading(false);
     }
   }, []);
@@ -61,11 +57,10 @@ const PokemonGallery: React.FC = () => {
       const trimmedQuery = query.trim();
       setIsLoading(true);
       setSearchQuery(trimmedQuery);
-      localStorage.setItem('searchQuery', trimmedQuery);
 
       if (trimmedQuery === '') {
-        window.history.pushState({}, '', window.location.pathname);
         fetchAllPokemonsData(currentPage);
+        window.history.pushState({}, '', window.location.pathname);
         return;
       } else {
         window.history.pushState(
@@ -79,15 +74,14 @@ const PokemonGallery: React.FC = () => {
         const pokemon = await getPokemon(trimmedQuery);
         if (pokemon) {
           setPokemons([pokemon]);
-          setIsLoading(false);
           setError(null);
         } else {
-          setIsLoading(false);
           setPokemons([]);
         }
       } catch (error) {
+        setError('Failed to fetch Pokémon data!');
+      } finally {
         setIsLoading(false);
-        setError('Failed to fetch Pokémon data. Please try again.');
       }
     },
     [fetchAllPokemonsData, setSearchQuery, currentPage]
@@ -95,17 +89,15 @@ const PokemonGallery: React.FC = () => {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const searchQuery =
-      urlParams.get('search') || localStorage.getItem('searchQuery') || '';
+    const initialSearchQuery = urlParams.get('search') || searchQuery;
 
-    setCurrentPage(Number(pageId) || 1);
-    const trimmedQuery = searchQuery.trim();
+    const trimmedQuery = initialSearchQuery.trim();
     if (trimmedQuery) {
       handleSearch(trimmedQuery);
     } else {
-      fetchAllPokemonsData(Number(pageId) || 1);
+      fetchAllPokemonsData(currentPage);
     }
-  }, [fetchAllPokemonsData, handleSearch, pageId]);
+  }, [fetchAllPokemonsData, handleSearch, currentPage, searchQuery]);
 
   useEffect(() => {
     if (searchQuery) {
@@ -130,19 +122,22 @@ const PokemonGallery: React.FC = () => {
       <div className="flex justify-center items-center mt-16">
         <SearchBar onSearch={(query) => handleSearch(query)} />
       </div>
-      {isLoading && <p>Loading...</p>}
-      <CardsList
-        pokemons={pokemons}
-        currentPage={currentPage}
-        onCardClick={handleCardClick}
-      />
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-        nextUrl={nextUrl}
-        previousUrl={previousUrl}
-      />
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <CardsList
+            pokemons={pokemons}
+            currentPage={currentPage}
+            onCardClick={handleCardClick}
+          />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
+      )}
     </main>
   );
 };

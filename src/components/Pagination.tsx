@@ -3,26 +3,22 @@ import Button from './ui/Button';
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
-  nextUrl: string | null;
-  previousUrl: string | null;
   onPageChange: (page: number) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
-  previousUrl,
-  nextUrl,
   onPageChange,
 }) => {
   const handlePrevious = (): void => {
-    if (previousUrl) {
+    if (currentPage > 1) {
       onPageChange(currentPage - 1);
     }
   };
 
   const handleNext = (): void => {
-    if (nextUrl) {
+    if (currentPage < totalPages) {
       onPageChange(currentPage + 1);
     }
   };
@@ -32,7 +28,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <Button
         onClick={handlePrevious}
         className="bg-blue-500 hover:bg-blue-700 disabled:opacity-50"
-        disabled={!previousUrl}
+        disabled={currentPage === 1}
       >
         Previous
       </Button>
@@ -43,7 +39,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <Button
         onClick={handleNext}
         className="bg-blue-500 hover:bg-blue-700 disabled:opacity-50"
-        disabled={!nextUrl}
+        disabled={currentPage === totalPages}
       >
         Next
       </Button>

@@ -11,9 +11,10 @@ const PokemonDetails: React.FC = () => {
   const [pokemon, setPokemon] = useState<PokemonDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { pageId } = useParams<{ pageId: string }>();
   const detailsRef = useRef(null);
 
-  useOutsideClick(detailsRef, () => navigate('/'));
+  useOutsideClick(detailsRef, () => navigate(`/page/${pageId}`));
 
   useEffect(() => {
     const fetchPokemonDetails = async () => {
@@ -39,7 +40,7 @@ const PokemonDetails: React.FC = () => {
   }, [detailsId]);
 
   const handleClose = () => {
-    navigate('/page/1');
+    navigate(`/page/${pageId}`);
   };
 
   if (loading) {
