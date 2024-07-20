@@ -23,10 +23,10 @@ export const getPokemonsList = async (
 
 export const getPokemon = async (query: string): Promise<Pokemon | null> => {
   const response = await fetch(`${BASE_URL}${POKEMON_ENDPOINT}/${query}`);
+  if (response.status === 404) {
+    return null;
+  }
   if (!response.ok) {
-    if (response.status === 404) {
-      return null;
-    }
     throw new Error('Network response was not ok');
   }
   const data = await response.json();
