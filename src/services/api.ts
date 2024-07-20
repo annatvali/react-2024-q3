@@ -1,11 +1,12 @@
 import { Pokemon, TypeInfo } from '../types/type';
+import { ITEMS_PER_PAGE } from '../utils/constants';
 
 const BASE_URL = 'https://pokeapi.co/api/v2';
 const POKEMON_ENDPOINT = '/pokemon';
 
 export const getPokemonsList = async (
   offset = 0,
-  limit = 20
+  limit = ITEMS_PER_PAGE
 ): Promise<{
   results: { url: string }[];
   count: number;
