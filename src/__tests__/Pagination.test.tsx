@@ -10,8 +10,6 @@ describe('Pagination Component', () => {
       <Pagination
         currentPage={3}
         totalPages={5}
-        previousUrl="/page/2"
-        nextUrl="/page/4"
         onPageChange={onPageChangeMock}
       />
     );
@@ -26,8 +24,6 @@ describe('Pagination Component', () => {
       <Pagination
         currentPage={5}
         totalPages={5}
-        previousUrl="/page/4"
-        nextUrl={null}
         onPageChange={onPageChangeMock}
       />
     );
@@ -40,8 +36,6 @@ describe('Pagination Component', () => {
       <Pagination
         currentPage={1}
         totalPages={5}
-        previousUrl={null}
-        nextUrl="/page/2"
         onPageChange={onPageChangeMock}
       />
     );
