@@ -1,8 +1,12 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from 'react-router-dom';
 import LandingPageLayout from './layout/LandingPageLayout';
 import Home from './routes/Home';
 import AboutUs from './routes/AboutUs';
-import PokemmDetails from './routes/PokemonDetails';
+import PokemonDetails from './routes/PokemonDetails';
 import NotFoundPage from './routes/NotFoundPage';
 
 const router = createBrowserRouter([
@@ -12,16 +16,20 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
+        element: <Navigate to="/page/1" />,
+      },
+      {
+        path: '/page/:pageId',
         element: <Home />,
         children: [
           {
-            path: '/pokemon/:id',
-            element: <PokemmDetails />,
+            path: '/page/:pageId/details/:detailsId',
+            element: <PokemonDetails />,
           },
         ],
       },
       {
-        path: '/aboutus',
+        path: 'aboutus',
         element: <AboutUs />,
       },
       {

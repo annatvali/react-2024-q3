@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import useSearchQuery from '../hooks/useSearchQuery';
 import SearchBar from '../components/SearchBar';
 import { Pokemon, TypeInfo } from '../types/type';
@@ -6,21 +7,24 @@ import { getPokemonsList, getPokemon } from '../services/api';
 import Pagination from '../components/Pagination';
 import CardsList from '../components/CardsList';
 
-const Pokemons: React.FC = () => {
+const PokemonGallery: React.FC = () => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [searchQuery, setSearchQuery] = useSearchQuery('searchQuery', '');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const { pageId } = useParams<{ pageId: string }>();
+  const [currentPage, setCurrentPage] = useState<number>(Number(pageId) || 1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [nextUrl, setNextUrl] = useState<string | null>(null);
   const [previousUrl, setPreviousUrl] = useState<string | null>(null);
 
+  const navigate = useNavigate();
+
   const ITEMS_PER_PAGE = 20;
 
   const fetchAllPokemonsData = useCallback(async (page: number) => {
-    setLoading(true);
+    setIsLoading(true);
     try {
       const offset = (page - 1) * ITEMS_PER_PAGE;
       const pokemonsData = await getPokemonsList(offset, ITEMS_PER_PAGE);
@@ -29,9 +33,9 @@ const Pokemons: React.FC = () => {
       setTotalPages(Math.ceil(pokemonsData.count / ITEMS_PER_PAGE));
       setNextUrl(pokemonsData.next);
       setPreviousUrl(pokemonsData.previous);
-      setLoading(false);
+      setIsLoading(false);
     } catch (error) {
-      setLoading(false);
+      setIsLoading(false);
     }
   }, []);
 
@@ -55,7 +59,7 @@ const Pokemons: React.FC = () => {
   const handleSearch = useCallback(
     async (query: string) => {
       const trimmedQuery = query.trim();
-      setLoading(true);
+      setIsLoading(true);
       setSearchQuery(trimmedQuery);
       localStorage.setItem('searchQuery', trimmedQuery);
 
@@ -75,14 +79,14 @@ const Pokemons: React.FC = () => {
         const pokemon = await getPokemon(trimmedQuery);
         if (pokemon) {
           setPokemons([pokemon]);
-          setLoading(false);
+          setIsLoading(false);
           setError(null);
         } else {
-          setLoading(false);
+          setIsLoading(false);
           setPokemons([]);
         }
       } catch (error) {
-        setLoading(false);
+        setIsLoading(false);
         setError('Failed to fetch Pokémon data. Please try again.');
       }
     },
@@ -91,27 +95,17 @@ const Pokemons: React.FC = () => {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    let page = parseInt(urlParams.get('page') || '1', 10);
     const searchQuery =
       urlParams.get('search') || localStorage.getItem('searchQuery') || '';
 
-    if (!urlParams.has('page') || isNaN(page) || page < 1) {
-      page = 1;
-      urlParams.set('page', '1');
-      window.history.replaceState(
-        {},
-        '',
-        `${window.location.pathname}?${urlParams.toString()}`
-      );
-    }
-    setCurrentPage(page);
+    setCurrentPage(Number(pageId) || 1);
     const trimmedQuery = searchQuery.trim();
     if (trimmedQuery) {
       handleSearch(trimmedQuery);
     } else {
-      fetchAllPokemonsData(page);
+      fetchAllPokemonsData(Number(pageId) || 1);
     }
-  }, [fetchAllPokemonsData, handleSearch]);
+  }, [fetchAllPokemonsData, handleSearch, pageId]);
 
   useEffect(() => {
     if (searchQuery) {
@@ -119,16 +113,12 @@ const Pokemons: React.FC = () => {
     }
   }, [handleSearch, searchQuery]);
 
-  const handlePageChange = async (page: number) => {
-    setCurrentPage(page);
-    const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set('page', page.toString());
-    window.history.pushState(
-      {},
-      '',
-      `${window.location.pathname}?${urlParams.toString()}`
-    );
-    fetchAllPokemonsData(page);
+  const handlePageChange = (pageId: number) => {
+    navigate(`/page/${pageId}`);
+  };
+
+  const handleCardClick = (detailsId: number) => {
+    navigate(`/page/${currentPage}/details/${detailsId}`);
   };
 
   if (error) {
@@ -140,8 +130,12 @@ const Pokemons: React.FC = () => {
       <div className="flex justify-center items-center mt-16">
         <SearchBar onSearch={(query) => handleSearch(query)} />
       </div>
-      {loading && <p>Loading...</p>}
-      <CardsList pokemons={pokemons} />
+      {isLoading && <p>Loading...</p>}
+      <CardsList
+        pokemons={pokemons}
+        currentPage={currentPage}
+        onCardClick={handleCardClick}
+      />
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
@@ -153,4 +147,4 @@ const Pokemons: React.FC = () => {
   );
 };
 
-export default Pokemons;
+export default PokemonGallery;

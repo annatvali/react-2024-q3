@@ -7,7 +7,7 @@ import Button from '../components/ui/Button';
 import useOutsideClick from '../hooks/useOutsideClick';
 
 const PokemonDetails: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { detailsId } = useParams<{ detailsId: string }>();
   const [pokemon, setPokemon] = useState<PokemonDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -19,8 +19,8 @@ const PokemonDetails: React.FC = () => {
     const fetchPokemonDetails = async () => {
       setLoading(true);
       try {
-        if (typeof id === 'string') {
-          const numericId = parseInt(id, 10);
+        if (typeof detailsId === 'string') {
+          const numericId = parseInt(detailsId, 10);
           const details = await getPokemonDetails(numericId);
           setPokemon(details);
         } else {
@@ -33,13 +33,13 @@ const PokemonDetails: React.FC = () => {
       }
     };
 
-    if (id) {
+    if (detailsId) {
       fetchPokemonDetails();
     }
-  }, [id]);
+  }, [detailsId]);
 
   const handleClose = () => {
-    navigate('/');
+    navigate('/page/1');
   };
 
   if (loading) {
