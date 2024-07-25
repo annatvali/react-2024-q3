@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import useSearchQuery from '../hooks/useSearchQuery';
 import SearchBar from '../components/SearchBar';
 import { Pokemon, TypeInfo } from '../types/type';
-import { getPokemonsList, getPokemon } from '../services/api';
+import { getPokemonsList } from '../services/api';
 import Pagination from '../components/Pagination';
 import CardsList from '../components/CardsList';
 import { ITEMS_PER_PAGE } from '../utils/constants';
@@ -71,9 +71,13 @@ const PokemonGallery: React.FC = () => {
       }
 
       try {
-        const pokemon = await getPokemon(trimmedQuery);
-        if (pokemon) {
-          setPokemons([pokemon]);
+        const allPokemons = await getPokemonsList(0, 1000);
+        const filteredPokemons = allPokemons.results.filter((pokemon) =>
+          pokemon.name.toLowerCase().startsWith(trimmedQuery.toLowerCase())
+        );
+        if (filteredPokemons.length > 0) {
+          const detailedPokemons = await fetchPokemonDetails(filteredPokemons);
+          setPokemons(detailedPokemons);
         } else {
           setPokemons([]);
         }

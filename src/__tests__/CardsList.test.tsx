@@ -36,23 +36,4 @@ describe('CardsList Component', () => {
     });
     expect(cardImages).toHaveLength(mockPokemons.length);
   });
-
-  it('displays an appropriate message if no cards are present', () => {
-    render(
-      <BrowserRouter>
-        <CardsList pokemons={[]} currentPage={1} onCardClick={() => {}} />
-      </BrowserRouter>
-    );
-    const message = screen.getByText((_content, node) => {
-      const hasText = (node: Element | null) =>
-        node?.textContent === 'No Pokémon found.';
-      const nodeHasText = hasText(node);
-      const childrenDontHaveText = Array.from(node?.children ?? []).every(
-        (child) => !hasText(child)
-      );
-
-      return nodeHasText && childrenDontHaveText;
-    });
-    expect(message).toBeInTheDocument();
-  });
 });

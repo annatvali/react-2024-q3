@@ -8,7 +8,10 @@ export const getPokemonsList = async (
   offset = 0,
   limit = ITEMS_PER_PAGE
 ): Promise<{
-  results: { url: string }[];
+  results: {
+    [name: string]: string;
+    url: string;
+  }[];
   count: number;
   next: string | null;
   previous: string | null;
