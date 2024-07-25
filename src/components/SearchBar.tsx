@@ -7,7 +7,7 @@ type Props = {
 
 const SearchBar: React.FC<Props> = ({ onSearch }) => {
   const [query, setQuery] = useState('');
-  const [hasError, setState] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setQuery(e.target.value);
@@ -32,7 +32,7 @@ const SearchBar: React.FC<Props> = ({ onSearch }) => {
   };
 
   const handleErrorBtnClick = (): void => {
-    setState(true);
+    setHasError(true);
     throw new Error('Intentional error');
   };
 

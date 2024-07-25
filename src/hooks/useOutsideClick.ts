@@ -1,24 +1,22 @@
-import { useContext, useEffect } from 'react';
-import OutsideClickContext from './OutsideClickProvider';
+import { useRef, useEffect } from 'react';
 
-const useOutsideClick = <T extends HTMLElement>(
-  ref: React.RefObject<T>,
-  callback: () => void
-): void => {
-  const context = useContext(OutsideClickContext);
+const useOutsideClick = <T extends HTMLElement>(callback: () => void) => {
+  const ref = useRef<T>(null);
 
   useEffect(() => {
-    if (!context) {
-      console.error(
-        'useOutsideClick must be used within an OutsideClickProvider'
-      );
-      return;
-    }
-    if (!ref.current) return;
-    const unregister = context.registerElement(ref.current, callback);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        callback();
+      }
+    };
 
-    return () => unregister();
-  }, [ref, callback, context]);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [callback]);
+
+  return ref;
 };
 
 export default useOutsideClick;

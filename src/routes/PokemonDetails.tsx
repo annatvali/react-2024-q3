@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, RefObject } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import type { PokemonDetails } from '../types/type';
 import { getPokemonDetails } from '../services/api';
@@ -9,20 +9,20 @@ import useOutsideClick from '../hooks/useOutsideClick';
 const PokemonDetails: React.FC = () => {
   const { detailsId } = useParams<{ detailsId: string }>();
   const [pokemon, setPokemon] = useState<PokemonDetails | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const { pageId } = useParams<{ pageId: string }>();
-  const detailsRef = useRef(null);
 
-  useOutsideClick(detailsRef, () => navigate(`/page/${pageId}`));
+  const detailsRef: RefObject<HTMLDivElement> = useOutsideClick(() =>
+    navigate(`/page/${pageId}`)
+  );
 
   useEffect(() => {
     const fetchPokemonDetails = async () => {
-      setLoading(true);
+      setIsLoading(true);
       try {
-        if (typeof detailsId === 'string') {
-          const numericId = parseInt(detailsId, 10);
-          const details = await getPokemonDetails(numericId);
+        if (detailsId && !isNaN(Number(detailsId))) {
+          const details = await getPokemonDetails(Number(detailsId));
           setPokemon(details);
         } else {
           console.error('Invalid Pokémon ID');
@@ -30,7 +30,7 @@ const PokemonDetails: React.FC = () => {
       } catch (error) {
         console.error('Failed to load Pokémon details', error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -43,7 +43,7 @@ const PokemonDetails: React.FC = () => {
     navigate(`/page/${pageId}`);
   };
 
-  if (loading) {
+  if (isLoading) {
     return <p>Loading...</p>;
   }
 

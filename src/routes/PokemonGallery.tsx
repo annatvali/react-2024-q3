@@ -10,30 +10,15 @@ import { ITEMS_PER_PAGE } from '../utils/constants';
 
 const PokemonGallery: React.FC = () => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
-  const [searchQuery, setSearchQuery] = useSearchQuery('searchQuery', '');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState('');
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [searchQuery, setSearchQuery] = useSearchQuery('searchQuery', '');
 
   const { pageId } = useParams<{ pageId: string }>();
   const currentPage = Number(pageId) || 1;
-  const [totalPages, setTotalPages] = useState<number>(1);
 
   const navigate = useNavigate();
-
-  const fetchAllPokemonsData = useCallback(async (page: number) => {
-    setIsLoading(true);
-    try {
-      const offset = (page - 1) * ITEMS_PER_PAGE;
-      const pokemonsData = await getPokemonsList(offset, ITEMS_PER_PAGE);
-      const detailedPokemons = await fetchPokemonDetails(pokemonsData.results);
-      setPokemons(detailedPokemons);
-      setTotalPages(Math.ceil(pokemonsData.count / ITEMS_PER_PAGE));
-    } catch (error) {
-      console.error('Failed to fetch Pokémon data!', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
 
   const fetchPokemonDetails = async (pokemons: { url: string }[]) => {
     return Promise.all(
@@ -51,6 +36,21 @@ const PokemonGallery: React.FC = () => {
       })
     );
   };
+
+  const fetchAllPokemonsData = useCallback(async (page: number) => {
+    setIsLoading(true);
+    try {
+      const offset = (page - 1) * ITEMS_PER_PAGE;
+      const pokemonsData = await getPokemonsList(offset, ITEMS_PER_PAGE);
+      const detailedPokemons = await fetchPokemonDetails(pokemonsData.results);
+      setPokemons(detailedPokemons);
+      setTotalPages(Math.ceil(pokemonsData.count / ITEMS_PER_PAGE));
+    } catch (error) {
+      setError('Failed to fetch Pokémon data!');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   const handleSearch = useCallback(
     async (query: string) => {
@@ -74,7 +74,6 @@ const PokemonGallery: React.FC = () => {
         const pokemon = await getPokemon(trimmedQuery);
         if (pokemon) {
           setPokemons([pokemon]);
-          setError(null);
         } else {
           setPokemons([]);
         }
@@ -120,10 +119,12 @@ const PokemonGallery: React.FC = () => {
   return (
     <main className="mx-2">
       <div className="flex justify-center items-center mt-16">
-        <SearchBar onSearch={(query) => handleSearch(query)} />
+        <SearchBar onSearch={handleSearch} />
       </div>
       {isLoading ? (
         <p>Loading...</p>
+      ) : pokemons.length === 0 ? (
+        <p className="text-red-500">No Pokémon found.</p>
       ) : (
         <>
           <CardsList
@@ -131,11 +132,13 @@ const PokemonGallery: React.FC = () => {
             currentPage={currentPage}
             onCardClick={handleCardClick}
           />
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+          {pokemons.length && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          )}
         </>
       )}
     </main>
