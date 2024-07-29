@@ -8,6 +8,8 @@ import Home from './routes/Home';
 import AboutUs from './routes/AboutUs';
 import PokemonDetails from './routes/PokemonDetails';
 import NotFoundPage from './routes/NotFoundPage';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
+import ThemeToggleButton from './context/ThemeToggleButton';
 
 const router = createBrowserRouter([
   {
@@ -41,7 +43,22 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  const { theme } = useTheme();
+
+  return (
+    <div
+      className={theme === 'dark' ? 'bg-lightBlue text-black' : 'bg-darkBlue'}
+    >
+      <ThemeToggleButton />
+      <RouterProvider router={router} />
+    </div>
+  );
 };
 
-export default App;
+const AppWithThemeProvider = () => (
+  <ThemeProvider>
+    <App />
+  </ThemeProvider>
+);
+
+export default AppWithThemeProvider;

@@ -21,12 +21,16 @@
     "*.{css,md}": "prettier --write"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.2.6",
+    "@types/react-redux": "^7.1.33",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-redux": "^9.1.2",
     "react-router": "^6.24.1",
     "react-router-dom": "^6.24.1"
   },
   "devDependencies": {
+    "@iconify/react": "^5.0.2",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
