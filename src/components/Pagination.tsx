@@ -1,9 +1,12 @@
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setCurrentPage } from '../features/PokemonSlice';
 import Button from './ui/Button';
 
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
-  onPageChange: (page: number) => void;
+  onPageChange: (pageId: number) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -11,15 +14,24 @@ const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   onPageChange,
 }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handlePrevious = (): void => {
     if (currentPage > 1) {
-      onPageChange(currentPage - 1);
+      const pageId = currentPage - 1;
+      onPageChange(pageId);
+      dispatch(setCurrentPage(pageId));
+      navigate(`/page/${pageId}`);
     }
   };
 
   const handleNext = (): void => {
     if (currentPage < totalPages) {
-      onPageChange(currentPage + 1);
+      const pageId = currentPage + 1;
+      onPageChange(pageId);
+      dispatch(setCurrentPage(pageId));
+      navigate(`/page/${pageId}`);
     }
   };
 

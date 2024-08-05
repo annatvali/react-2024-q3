@@ -6,20 +6,23 @@ const ThemeToggleButton = () => {
 
   return (
     <button
-      className={`flex justify-between items-center w-full bg-blue-400 p-2 text-white ${theme === 'dark' ? 'bg-lightBlue' : 'bg-darkBlue'}`}
+      className={`flex justify-between items-center w-full bg-blue-400 p-2  ${theme === 'dark' ? 'bg-darkGray text-white' : 'bg-lightGray text-black'}`}
       onClick={toggleTheme}
     >
       <span>
         Click to switch to{' '}
         <span className="font-bold text-md">
-          {theme === 'light' ? 'light' : 'dark'}
+          {theme === 'light' ? 'dark' : 'light'}
         </span>{' '}
         mode
       </span>
       {theme === 'dark' ? (
-        <Icon icon="mingcute:sun-fill" className="text-2xl ml-2" />
+        <Icon
+          icon="mingcute:sun-fill"
+          className="text-yellow-200 text-2xl ml-2"
+        />
       ) : (
-        <Icon icon="mingcute:moon-fill" className="text-2xl ml-2" />
+        <Icon icon="mingcute:moon-fill" className="text-2xl ml-2 " />
       )}
     </button>
   );

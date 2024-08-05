@@ -1,12 +1,7 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from 'react';
-
-type Theme = 'light' | 'dark';
+import { createContext, useContext, ReactNode } from 'react';
+import { Theme } from '../types/types';
+import { useDispatch, useSelector } from 'react-redux';
+import { PokemonState, setTheme } from '../features/PokemonSlice';
 
 interface ThemeContextProps {
   theme: Theme;
@@ -24,15 +19,12 @@ function useTheme() {
 }
 
 const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  // const savedTheme = localStorage.getItem('theme');
-  const [theme, setTheme] = useState<Theme>('light');
-
-  useEffect(() => {
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+  const dispatch = useDispatch();
+  const theme = useSelector((state: PokemonState) => state.pokemon.theme);
 
   const toggleTheme = (): void => {
-    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+    const newTheme: Theme = theme === 'light' ? 'dark' : 'light';
+    dispatch(setTheme(newTheme));
   };
 
   return (

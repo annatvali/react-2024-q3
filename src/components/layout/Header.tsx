@@ -9,9 +9,6 @@ const Header = () => {
         <Link className="hover:text-amber-300 hover:underline" to="/">
           Home
         </Link>
-        <Link className="hover:text-amber-300 hover:underline" to="/aboutUs">
-          About
-        </Link>
       </div>
     </div>
   );

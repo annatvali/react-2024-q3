@@ -2,20 +2,20 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import Button from './ui/Button';
 
 type Props = {
-  onSearch: (query: string) => void;
+  onSearch: (searchQuery: string) => void;
 };
 
-const SearchBar: React.FC<Props> = ({ onSearch }) => {
-  const [query, setQuery] = useState('');
+const SearchForm: React.FC<Props> = ({ onSearch }) => {
+  const [searchQuery, setSearchQuery] = useState('');
   const [hasError, setHasError] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setQuery(e.target.value);
+    setSearchQuery(e.target.value);
   };
 
   const handleSubmit = (e: FormEvent): void => {
     e.preventDefault();
-    const trimmedQuery = query.trim();
+    const trimmedQuery = searchQuery.trim();
 
     if (trimmedQuery === '') {
       const searchParams = new URLSearchParams(window.location.search);
@@ -37,14 +37,14 @@ const SearchBar: React.FC<Props> = ({ onSearch }) => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full mt-8">
       <form
         onSubmit={handleSubmit}
-        className="w-full flex-wrap sm:flex items-center space-x-2"
+        className="w-full text-black flex-wrap sm:flex items-center space-x-2"
       >
         <input
           type="text"
-          value={query}
+          value={searchQuery}
           onChange={handleChange}
           className="border-2 p-2 flex-grow rounded-md"
           placeholder="Search Pokémon..."
@@ -72,4 +72,4 @@ const SearchBar: React.FC<Props> = ({ onSearch }) => {
   );
 };
 
-export default SearchBar;
+export default SearchForm;

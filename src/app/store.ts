@@ -1,15 +1,25 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { pokemonApi } from '../services/pokemon';
-import pokemonReducer from '../reducers/pokemonReducer';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { pokemonApi } from '../services/apiService';
+import pokemonSlice from '../features/PokemonSlice';
+import selectedItemsSlice from '../features/SelectedItemsSlice';
 
-export const store = configureStore({
-  reducer: {
-    [pokemonApi.reducerPath]: pokemonApi.reducer,
-    pokemonState: pokemonReducer,
-  },
+const rootReducer = combineReducers({
+  [pokemonApi.reducerPath]: pokemonApi.reducer,
+  pokemon: pokemonSlice,
+  selectedItems: selectedItemsSlice,
+});
+
+const store = configureStore({
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(pokemonApi.middleware),
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export type AppState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector;
+
+export default store;

@@ -4,12 +4,13 @@ import {
   Navigate,
 } from 'react-router-dom';
 import LandingPageLayout from './layout/LandingPageLayout';
-import Home from './routes/Home';
-import AboutUs from './routes/AboutUs';
-import PokemonDetails from './routes/PokemonDetails';
 import NotFoundPage from './routes/NotFoundPage';
+import Home from './routes/Home';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import ThemeToggleButton from './context/ThemeToggleButton';
+import './index.css';
+import PokemonDetails from './routes/PokemonDetails';
+import Flayout from './components/Flayout';
 
 const router = createBrowserRouter([
   {
@@ -31,10 +32,6 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: 'aboutus',
-        element: <AboutUs />,
-      },
-      {
         path: '*',
         element: <NotFoundPage />,
       },
@@ -47,7 +44,9 @@ const App = () => {
 
   return (
     <div
-      className={theme === 'dark' ? 'bg-lightBlue text-black' : 'bg-darkBlue'}
+      className={
+        theme === 'dark' ? 'bg-darkGray text-white' : 'bg-lightGray text-black'
+      }
     >
       <ThemeToggleButton />
       <RouterProvider router={router} />
@@ -58,6 +57,7 @@ const App = () => {
 const AppWithThemeProvider = () => (
   <ThemeProvider>
     <App />
+    <Flayout />
   </ThemeProvider>
 );
 
