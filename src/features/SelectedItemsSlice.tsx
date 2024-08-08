@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface SelectedItemsState {
+export interface SelectedItemsState {
   selectedItems: string[];
   selectedItemsCount: number;
 }

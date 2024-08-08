@@ -3,7 +3,7 @@ import { Pokemon, PokemonListResponse, PokemonExtended } from '../types/types';
 import { transformPokemonData } from '../utils/dataTransforms';
 import { ITEMS_PER_PAGE } from '../utils/constants';
 
-interface GetPokemonsParams {
+export interface GetPokemonsParams {
   page: number;
   offset?: number;
 }
