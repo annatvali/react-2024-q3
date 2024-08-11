@@ -1,6 +1,6 @@
 import { describe, it, expect, test } from 'vitest';
 import { render } from '@testing-library/react';
-import { ThemeProvider } from '../context/ThemeContext';
+import { ThemeProvider } from '../context/ThemeProvider';
 import { Provider } from 'react-redux';
 import App from '../App';
 import Flayout from '../components/Flayout';

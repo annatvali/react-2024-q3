@@ -1,19 +1,20 @@
 import { Pokemon } from '../types/types';
-import Card from './Card';
+import MemoizedCard from './Card';
 
 interface CardListProps {
-  pokemons: {
-    count: number;
-    results: Pokemon[];
-  };
+  pokemons: Pokemon[];
   onCardClick: (id: number) => void;
 }
 
 const CardList: React.FC<CardListProps> = ({ pokemons, onCardClick }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 my-16">
-      {pokemons.results.map((pokemon) => (
-        <Card key={pokemon.name} {...pokemon} onClick={onCardClick} />
+      {pokemons.map((pokemon) => (
+        <MemoizedCard
+          key={pokemon.id}
+          pokemon={pokemon}
+          onClick={() => onCardClick(pokemon.id)}
+        />
       ))}
     </div>
   );

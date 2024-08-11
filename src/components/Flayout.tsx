@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { unselectAll } from '../features/SelectedItemsSlice';
 import { AppState } from '../app/store';
-import { useTheme } from '../context/ThemeContext';
+import useTheme from '../context/useTheme';
 import Button from './ui/Button';
 import { CSVLink } from 'react-csv';
 import { Icon } from '@iconify/react';

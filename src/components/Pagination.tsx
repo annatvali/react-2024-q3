@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { setCurrentPage } from '../features/PokemonSlice';
 import Button from './ui/Button';
@@ -14,7 +14,7 @@ const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   onPageChange,
 }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const handlePrevious = (): void => {
@@ -22,7 +22,7 @@ const Pagination: React.FC<PaginationProps> = ({
       const pageId = currentPage - 1;
       onPageChange(pageId);
       dispatch(setCurrentPage(pageId));
-      navigate(`/page/${pageId}`);
+      router.push(`/page/${pageId}`);
     }
   };
 
@@ -31,7 +31,7 @@ const Pagination: React.FC<PaginationProps> = ({
       const pageId = currentPage + 1;
       onPageChange(pageId);
       dispatch(setCurrentPage(pageId));
-      navigate(`/page/${pageId}`);
+      router.push(`/page/${pageId}`);
     }
   };
 

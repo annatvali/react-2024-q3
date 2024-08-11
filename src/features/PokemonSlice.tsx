@@ -5,7 +5,7 @@ export interface PokemonState {
   currentPage: number;
   isPokemonDetailsOpen: boolean;
   theme: Theme;
-  detailsId: string | null;
+  detailsId: number | null;
   searchQuery: string;
 }
 
@@ -30,7 +30,7 @@ const pokemonSlice = createSlice({
     setTheme(state, action: PayloadAction<Theme>) {
       state.theme = action.payload;
     },
-    setSelectedId(state, action: PayloadAction<string | null>) {
+    setSelectedId(state, action: PayloadAction<number | null>) {
       state.detailsId = action.payload;
     },
     setSearchQuery(state, action: PayloadAction<string>) {

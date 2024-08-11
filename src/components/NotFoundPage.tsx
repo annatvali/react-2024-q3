@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 const NotFoundPage = () => {
   return (
@@ -9,7 +9,7 @@ const NotFoundPage = () => {
           The page you are looking for doesn't exist.
         </p>
         <Link
-          to="/"
+          href="/"
           className="mt-6 inline-block text-lg text-blue-500 hover:text-blue-700"
         >
           Back to Home

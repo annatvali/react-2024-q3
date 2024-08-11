@@ -1,4 +1,4 @@
-import { useTheme } from './ThemeContext';
+import useTheme from './useTheme';
 import { Icon } from '@iconify/react';
 
 const ThemeToggleButton = () => {

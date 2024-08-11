@@ -1,28 +1,30 @@
 import { RefObject } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import type { PokemonExtended } from '../types/types';
+import { useRouter } from 'next/router';
 import { useGetPokemonDetailsQuery } from '../services/apiService';
 import generateGradient from '../utils/gradientGenerator';
 import Button from '../components/ui/Button';
 import useOutsideClick from '../hooks/useOutsideClick';
 
-const PokemonDetails: React.FC<PokemonExtended> = () => {
-  const { detailsId } = useParams<{ detailsId: string }>();
-  const navigate = useNavigate();
-  const { pageId } = useParams<{ pageId: string }>();
+interface PokemonDetailsProps {
+  detailsId: number;
+}
+
+const PokemonDetails: React.FC<PokemonDetailsProps> = ({ detailsId }) => {
+  const router = useRouter();
+  const { pageId } = router.query;
 
   const {
     data: pokemon,
     isLoading,
     error,
-  } = useGetPokemonDetailsQuery(detailsId ?? '');
+  } = useGetPokemonDetailsQuery(detailsId);
 
   const detailsRef: RefObject<HTMLDivElement> = useOutsideClick(() =>
-    navigate(`/page/${pageId}`)
+    router.push(`/page/${pageId}`)
   );
 
   const handleClose = () => {
-    navigate(`/page/${pageId}`);
+    router.push(`/page/${pageId}`);
   };
 
   if (isLoading) {
@@ -32,7 +34,8 @@ const PokemonDetails: React.FC<PokemonExtended> = () => {
   if (error) {
     return <div>Error loading Pokemon details</div>;
   }
-  const gradientClass = detailsId ? generateGradient(Number(detailsId)) : '';
+
+  const gradientClass = generateGradient(detailsId);
   return (
     <div
       ref={detailsRef}
@@ -92,7 +95,7 @@ const PokemonDetails: React.FC<PokemonExtended> = () => {
             </p>
             <p>
               <span className="font-bold text-amber-400">Types :</span>{' '}
-              {pokemon.types.map((type) => type.type.name).join(', ')}
+              {pokemon.types?.map((type) => type.type.name).join(', ')}
             </p>
           </div>
         </>

@@ -2,37 +2,35 @@ import { memo } from 'react';
 import generateGradient from '../utils/gradientGenerator';
 import { useAppDispatch, useAppSelector } from '../app/store';
 import { selectItem, unselectItem } from '../features/SelectedItemsSlice';
+import { Pokemon } from '../types/types';
 
 interface PokemonCardProps {
-  id: number;
-  name: string;
-  sprites: {
-    front_default: string;
-  };
+  pokemon: Pokemon;
   onClick: (id: number) => void;
 }
 
-const Card: React.FC<PokemonCardProps> = ({ id, name, sprites, onClick }) => {
-  const gradientClass = generateGradient(id);
+const Card: React.FC<PokemonCardProps> = ({ pokemon, onClick }) => {
+  const gradientClass = generateGradient(pokemon.id);
+  const spriteUrl = pokemon.sprites?.front_default;
 
   const dispatch = useAppDispatch();
   const selectedItems = useAppSelector(
     (state) => state.selectedItems.selectedItems
   );
-  const isSelected = selectedItems.includes(name);
+  const isSelected = selectedItems.includes(pokemon.name);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
     if (isSelected) {
-      dispatch(unselectItem(name));
+      dispatch(unselectItem(pokemon.name));
     } else {
-      dispatch(selectItem(name));
+      dispatch(selectItem(pokemon.name));
     }
   };
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.preventDefault();
-    onClick(id);
+    onClick(pokemon.id);
   };
 
   return (
@@ -42,17 +40,17 @@ const Card: React.FC<PokemonCardProps> = ({ id, name, sprites, onClick }) => {
     >
       <div className="relative h-40 overflow-hidden rounded-md">
         <div className="absolute top-0 right-0 bg-amber-300 py-2 px-4 rounded-md z-10">
-          <p className="text-gray-700 font-bold">{id}</p>
+          <p className="text-gray-700 font-bold">{pokemon.id}</p>
         </div>
         <img
           className="h-full w-full object-contain transition duration-300 ease-in-out group-hover:scale-110"
-          src={sprites.front_default}
-          alt={name}
+          src={spriteUrl}
+          alt={pokemon.name}
         />
       </div>
       <div className="p-4">
         <h3 className="text-xl font-bold text-gray-900 text-center mb-2">
-          {name}
+          {pokemon.name}
         </h3>
       </div>
       <div className="flex items-center gap-2 p-2">
