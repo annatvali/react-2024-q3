@@ -4,6 +4,7 @@ import { useGetPokemonDetailsQuery } from '../services/apiService';
 import generateGradient from '../utils/gradientGenerator';
 import Button from '../components/ui/Button';
 import useOutsideClick from '../hooks/useOutsideClick';
+import Image from 'next/image';
 
 interface PokemonDetailsProps {
   detailsId: number;
@@ -53,24 +54,32 @@ const PokemonDetails: React.FC<PokemonDetailsProps> = ({ detailsId }) => {
             <h2 className="uppercase text-xl text-center text-white font-bold my-4">
               {pokemon.name}
             </h2>
-            <img
+            <Image
+              width={100}
+              height={100}
               src={pokemon.sprites.front_default}
               alt={pokemon.name}
               className="min-w-full h-auto"
             />
             <div className="w-40 flex flex-col md:flex-row md:w-12">
-              <img
-                src={pokemon.sprites.back_default}
+              <Image
+                width={100}
+                height={100}
+                src={pokemon.sprites.back_default as string}
                 alt={pokemon.name}
                 className="min-w-full h-auto"
               />
-              <img
-                src={pokemon.sprites.front_shiny}
+              <Image
+                width={100}
+                height={100}
+                src={pokemon.sprites.front_shiny as string}
                 alt={pokemon.name}
                 className="min-w-full h-auto"
               />
-              <img
-                src={pokemon.sprites.back_shiny}
+              <Image
+                width={100}
+                height={100}
+                src={pokemon.sprites.back_shiny as string}
                 alt={pokemon.name}
                 className="min-w-full h-auto"
               />

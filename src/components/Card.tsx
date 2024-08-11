@@ -3,6 +3,7 @@ import generateGradient from '../utils/gradientGenerator';
 import { useAppDispatch, useAppSelector } from '../app/store';
 import { selectItem, unselectItem } from '../features/SelectedItemsSlice';
 import { Pokemon } from '../types/types';
+import Image from 'next/image';
 
 interface PokemonCardProps {
   pokemon: Pokemon;
@@ -35,6 +36,7 @@ const Card: React.FC<PokemonCardProps> = ({ pokemon, onClick }) => {
 
   return (
     <div
+      test-id={`card-${pokemon.id}`}
       onClick={handleClick}
       className={`group relative my-4 cursor-pointer overflow-hidden pl-2 rounded-lg shadow-md transition duration-150 ease-in-out ${gradientClass}`}
     >
@@ -42,7 +44,9 @@ const Card: React.FC<PokemonCardProps> = ({ pokemon, onClick }) => {
         <div className="absolute top-0 right-0 bg-amber-300 py-2 px-4 rounded-md z-10">
           <p className="text-gray-700 font-bold">{pokemon.id}</p>
         </div>
-        <img
+        <Image
+          width={200}
+          height={200}
           className="h-full w-full object-contain transition duration-300 ease-in-out group-hover:scale-110"
           src={spriteUrl}
           alt={pokemon.name}

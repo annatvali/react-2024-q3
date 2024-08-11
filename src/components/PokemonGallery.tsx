@@ -42,13 +42,11 @@ const PokemonGallery: React.FC = () => {
 
   const totalPages = Math.ceil((allPokemonsData?.count ?? 0) / ITEMS_PER_PAGE);
 
-  // Check if we are on a details page
   useEffect(() => {
     const isDetailsPage = location.pathname.includes('/details/');
     dispatch(setIsPokemonDetailsOpen(isDetailsPage));
   }, [router.asPath, dispatch]);
 
-  // Reset search query and pagination when navigating to the home page
   useEffect(() => {
     if (router.pathname === '/' || router.pathname === '/page/1') {
       dispatch(setSearchQuery(''));
@@ -56,22 +54,18 @@ const PokemonGallery: React.FC = () => {
     }
   }, [router.pathname, dispatch]);
 
-  // Update the current page based on the query parameter
   useEffect(() => {
     if (pageId) {
       dispatch(setCurrentPage(Number(pageId)));
     }
   }, [pageId, dispatch]);
 
-  // Handle card click to navigate to the details page
   const handleCardClick = (detailsId: number) => {
     router.push(`/page/${currentPage}/details/${detailsId}`);
   };
 
-  // Handle search query changes
   const handleSearch = (searchQuery: string) => {
     if (!searchQuery) {
-      // Reset to show all Pokémon if the search query is empty
       dispatch(setSearchQuery(''));
       router.push(`/page/1`);
     } else {
@@ -81,12 +75,10 @@ const PokemonGallery: React.FC = () => {
     dispatch(setCurrentPage(1));
   };
 
-  // Determine which Pokémon data to display
   const pokemons = searchQuery
     ? searchPokemonData?.results
     : allPokemonsData?.results;
 
-  // Handle loading and error states
   if (allPokemonsLoading || searchPokemonLoading) return <div>Loading...</div>;
   if (allPokemonsError || searchPokemonError)
     return <div>Error loading pokemons</div>;
@@ -94,15 +86,19 @@ const PokemonGallery: React.FC = () => {
   return (
     <div>
       <SearchForm onSearch={handleSearch} />
-      {pokemons && (
-        <CardList pokemons={pokemons} onCardClick={handleCardClick} />
-      )}
-      {!searchQuery && pokemons && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={(newPage) => dispatch(setCurrentPage(newPage))}
-        />
+      {pokemons && pokemons.length > 0 ? (
+        <>
+          <CardList pokemons={pokemons} onCardClick={handleCardClick} />
+          {!searchQuery && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={(newPage) => dispatch(setCurrentPage(newPage))}
+            />
+          )}
+        </>
+      ) : (
+        <div>No Pokémon found!</div>
       )}
     </div>
   );

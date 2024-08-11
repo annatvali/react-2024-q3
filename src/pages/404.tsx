@@ -1,6 +1,7 @@
+import { NextPage } from 'next';
 import Link from 'next/link';
 
-const NotFoundPage = () => {
+const NotFoundPage: NextPage = () => {
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="text-center">

@@ -5,18 +5,20 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:@next/next/recommended',
     'prettier',
   ],
+  settings: {
+    next: {
+      rootDir: './src',
+    },
+  },
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: [
-      './tsconfig.json',
-      './tsconfig.node.json',
-      './tsconfig.eslint.json',
-    ],
+    project: ['./tsconfig.json'],
     tsconfigRootDir: __dirname,
   },
   plugins: ['react-refresh', 'react-compiler'],

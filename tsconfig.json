@@ -1,16 +1,10 @@
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    }
-  ],
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
-    "noEmit": false,
+    "noEmit": true,
     "incremental": true,
     "module": "esnext",
     "esModuleInterop": true,
@@ -25,6 +19,14 @@
     ],
     "strictNullChecks": true
   },
-  "include": ["next-env.d.ts", "./dist/types/**/*.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "**/*.ts",
+    "**/*.tsx",
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "./dist/types/**/*.ts"
+  ],
+  "exclude": ["node_modules", ".next", "dist"]
 }
